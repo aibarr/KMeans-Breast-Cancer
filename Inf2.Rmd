@@ -90,7 +90,7 @@ head(data_normalizada, n = 3)
 
 ## 3.1 Cantidad de grupos a buscar
 
-Dada la descripción de los datos y la problematica presentada, es que sabemos que los pacientes se dividen entre sanos y enfermos de Cancer de Mama, por lo tanto, buscaremos dos grupos de datos que describan la misma clasificación de pacientes.
+Dada la descripción de los datos y la problemática presentada, es que sabemos que los pacientes se dividen entre sanos y enfermos de Cáncer de Mama, por lo tanto, buscaremos dos grupos de datos que describan la misma clasificación de pacientes.
 
 ## 3.2 Procesamiento de datos
 
@@ -99,19 +99,20 @@ Con la data ya normalizada previamente realizaremos el siguiente análisis.
 ```{r}
 #Primero, crearemos un cluster sólo usando los datos y sin clasificación, y generando sólo dos grupos
 
-clusterPacientes = kmeans(data_normalizada[,1:9], center= 2)
-
-table(clusterPacientes$cluster, data_normalizada$Classification)
-
+clusterPacientes_2 = kmeans(data_normalizada[,1:9], center= 2)
+table(clusterPacientes_2$cluster, data_normalizada$Classification)
 ```
 
 Y luego graficamos este cluster
 
 ```{r}
-clusplot(data_normalizada, clusterPacientes$cluster, color=T, shade=T)
+clusplot(data_normalizada, clusterPacientes_2$cluster, color=T, shade=T,
+         main = "Clustering con K-means - 2 clústers",
+         xlab = "Variable X",
+         ylab = "Variable Y")
 ```
 
-De este gráfico, ya se puede desprender que existen dos grupo y que en general coinciden en número respecto a la clasificación incial de pacientes, pero ¿es esta la mejor forma de agrupar los datos?
+De este gráfico, ya se puede desprender que existen dos grupos y que en general coinciden en número respecto a la clasificación incial de pacientes, pero ¿es esta la mejor forma de agrupar los datos?
 
 ## 3.3 Verificación de cantidad de grupos
 
@@ -127,12 +128,18 @@ plot(1:10, tot.withinss, type="b", pch=19)
 
 ```
 
-Como se puede notar en el gráfico anterior, existe un "codo" en el punto dos 2, por lo que esta podría ser la forma más optima de agrupar. Sin embargo, existe incluso otro colo en el punto 4 y 8; probemos uno de estos grupos para ver si existe un mejor agrupamiento.
+Como se puede notar en el gráfico anterior, existe un "codo" en el punto dos 2, por lo que ésta podría ser la forma más optima de agrupar. Sin embargo, existe incluso otro codo en el punto 4 y 8; probemos uno de estos grupos para ver si existe un mejor agrupamiento.
 
 ```{r}
 clusterPacientes = kmeans(data_normalizada[,1:9], center= 4)
 
-clusplot(data_normalizada, clusterPacientes$cluster, color=T, shade=T)
+clusplot(data_normalizada, clusterPacientes$cluster, color=T, shade=T, main = "Clustering con K-means - 4 clústers",
+         xlab = "Variable X",
+         ylab = "Variable Y")
 
 ```
-Como se puede observar, usar 4 grupos no se gana mucho, además de no coincidir con la problematica planteada en los datos, por lo que no sería conveniente para este trabajo el usar más de 2 grupos.
+Como se puede observar, usar 4 grupos no se gana mucho, además de no coincidir con la problemática planteada en los datos, por lo que no sería conveniente para este trabajo el usar más de 2 grupos.
+
+Adicionalmente, complementario al análisis del codo, al calcular el índice Davies-Bouldin y el de silueta, para ambos casos (2 y 4 clústers) siempre el mejor escenario resultó ser el de 2 agrupaciones.
+
+## Bibliografía
